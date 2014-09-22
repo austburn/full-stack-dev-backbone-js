@@ -1,0 +1,27 @@
+{
+  "name": "fs-backbone",
+  "version": "1.0.0",
+  "description": "Full stack development with Backbone.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "jslint './app/*.js'"
+  },
+  "keywords": [
+    "backbone"
+  ],
+  "author": "Austin J. Burnett",
+  "license": "ISC",
+  "devDependencies": {
+    "backbone": "^1.1.2",
+    "jquery": "^2.1.1",
+    "pushstate-server": "^1.1.0",
+    "underscore": "*",
+    "watchify": "^1.0.2"
+  },
+  "dependencies": {
+    "express": "^4.8.8",
+    "jslint": "^0.6.2",
+    "morgan": "^1.3.0",
+    "path": "^0.4.9"
+  }
+}
