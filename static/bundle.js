@@ -1,4 +1,20 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/austin/learning/fs-backbone/app/node_modules/collections/movies.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/austin/learning/fs-backbone/app/main.js":[function(require,module,exports){
+var Backbone, $, MoviesRouter;
+
+Backbone = require('backbone');
+$ = require('jquery');
+Backbone.$ = $;
+MoviesRouter = require('routers/movies');
+
+$(document).ready(function () {
+  console.log('initialize app');
+  var router = new MoviesRouter({ el: $('#movies') });
+  Backbone.history.start({
+    pushState: true,
+    root: '/'
+  });
+});
+},{"backbone":"/home/austin/learning/fs-backbone/node_modules/backbone/backbone.js","jquery":"/home/austin/learning/fs-backbone/node_modules/jquery/dist/jquery.js","routers/movies":"/home/austin/learning/fs-backbone/app/node_modules/routers/movies.js"}],"/home/austin/learning/fs-backbone/app/node_modules/collections/movies.js":[function(require,module,exports){
 var Backbone, Movie, Movies;
 
 Backbone = require('backbone');
@@ -38,7 +54,41 @@ Movie = Backbone.Model.extend({
 });
 module.exports = Movie;
 
-},{"backbone":"/home/austin/learning/fs-backbone/node_modules/backbone/backbone.js"}],"/home/austin/learning/fs-backbone/app/node_modules/views/movie.js":[function(require,module,exports){
+},{"backbone":"/home/austin/learning/fs-backbone/node_modules/backbone/backbone.js"}],"/home/austin/learning/fs-backbone/app/node_modules/routers/movies.js":[function(require,module,exports){
+var Backbone, Movies, data, movies, MoviesList, MoviesRouter;
+
+Backbone = require('backbone');
+Movies = require('collections/movies');
+data = require('../../../movies.json');
+movies = new Movies(data);
+MoviesList = require('views/moviesList');
+
+MoviesRouter = Backbone.Router.extend({
+  routes: {
+    'movies/:id': 'selectMovie',
+    '':           'showMain'
+  },
+
+  selectMovie: function (id) {
+    this.moviesList.render();
+    this.movies.selectByID(id);
+  },
+
+  showMain: function () {
+    this.moviesList.render();
+  },
+
+  initialize: function (options) {
+    this.movies = movies;
+    this.moviesList = new MoviesList({
+      el: options.el,
+      collection: movies
+    });
+  }
+});
+
+module.exports = MoviesRouter;
+},{"../../../movies.json":"/home/austin/learning/fs-backbone/movies.json","backbone":"/home/austin/learning/fs-backbone/node_modules/backbone/backbone.js","collections/movies":"/home/austin/learning/fs-backbone/app/node_modules/collections/movies.js","views/moviesList":"/home/austin/learning/fs-backbone/app/node_modules/views/moviesList.js"}],"/home/austin/learning/fs-backbone/app/node_modules/views/movie.js":[function(require,module,exports){
 var $, Backbone, MovieView, _;
 
 $ = require('jquery');
@@ -90,7 +140,7 @@ MoviesList = Backbone.View.extend({
 });
 module.exports = MoviesList;
 },{"backbone":"/home/austin/learning/fs-backbone/node_modules/backbone/backbone.js","views/movie":"/home/austin/learning/fs-backbone/app/node_modules/views/movie.js"}],"/home/austin/learning/fs-backbone/movies.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=[
+module.exports=module.exports=[
   {
     "id": 1,
     "title": "The Artist"
@@ -13740,22 +13790,4 @@ return jQuery;
   }
 }.call(this));
 
-},{}],"app":[function(require,module,exports){
-var Backbone, $, Movies, MovieView, data, movies, MoviesList;
-
-Backbone = require('backbone');
-$ = require('jquery');
-Backbone.$ = $;
-Movies = require('collections/movies');
-MovieView = require('views/movie');
-MoviesList = require('views/moviesList');
-data = require('../movies.json');
-
-movies = new Movies(data);
-
-module.exports = {
-  movies: movies,
-  MovieView: MovieView,
-  MoviesList: MoviesList
-};
-},{"../movies.json":"/home/austin/learning/fs-backbone/movies.json","backbone":"/home/austin/learning/fs-backbone/node_modules/backbone/backbone.js","collections/movies":"/home/austin/learning/fs-backbone/app/node_modules/collections/movies.js","jquery":"/home/austin/learning/fs-backbone/node_modules/jquery/dist/jquery.js","views/movie":"/home/austin/learning/fs-backbone/app/node_modules/views/movie.js","views/moviesList":"/home/austin/learning/fs-backbone/app/node_modules/views/moviesList.js"}]},{},[]);
+},{}]},{},["/home/austin/learning/fs-backbone/app/main.js"]);

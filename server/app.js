@@ -17,7 +17,7 @@ app.get('/static/style.css', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-  var html = path.resolve(__dirname + '/../index.html');
+  var html = path.resolve(__dirname + '/../static/index.html');
   res.sendFile(html);
 });
 

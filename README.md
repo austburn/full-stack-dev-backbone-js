@@ -4,5 +4,10 @@ This is a simple Backbone project to get comfortable with Backbone again. I once
 There isn't much here yet, but I plan to update this chapter-ly.
 Currently, this pretty much only uses ExpressJS and browserify. To run:
 ```
-# Install NodeJS
+# Get all the packages you'll need
+npm install
+# Use browserify to bundle our javascript code
+browserify -r ./app/main.js:app > ./static/bundle.js
+
+node server/app.js
 ```

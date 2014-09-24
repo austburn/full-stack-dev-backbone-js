@@ -1,17 +1,15 @@
-var Backbone, $, Movies, MovieView, data, movies, MoviesList;
+var Backbone, $, MoviesRouter;
 
 Backbone = require('backbone');
 $ = require('jquery');
 Backbone.$ = $;
-Movies = require('collections/movies');
-MovieView = require('views/movie');
-MoviesList = require('views/moviesList');
-data = require('../movies.json');
+MoviesRouter = require('routers/movies');
 
-movies = new Movies(data);
-
-module.exports = {
-  movies: movies,
-  MovieView: MovieView,
-  MoviesList: MoviesList
-};
+$(document).ready(function () {
+  console.log('initialize app');
+  var router = new MoviesRouter({ el: $('#movies') });
+  Backbone.history.start({
+    pushState: true,
+    root: '/'
+  });
+});
