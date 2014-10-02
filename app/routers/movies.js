@@ -1,10 +1,10 @@
-var Backbone, Movies, data, movies, MoviesList, MoviesRouter;
+var Backbone, Movies, data, movies, Layout, MoviesRouter;
 
 Backbone = require('backbone');
 Movies = require('collections/movies');
 data = require('../../../movies.json');
 movies = new Movies(data);
-MoviesList = require('views/moviesList');
+Layout = require('views/layout');
 
 MoviesRouter = Backbone.Router.extend({
   routes: {
@@ -13,19 +13,21 @@ MoviesRouter = Backbone.Router.extend({
   },
 
   selectMovie: function (id) {
-    this.moviesList.render();
+    this.layout.render();
     this.movies.selectByID(id);
+    this.layout.setDetails(this.movies.get(id));
   },
 
   showMain: function () {
-    this.moviesList.render();
+    this.movies.resetSelected();
+    this.layout.setChose();
   },
 
   initialize: function (options) {
     this.movies = movies;
-    this.moviesList = new MoviesList({
-      el: options.el,
-      collection: movies
+    this.layout = Layout.getInstance({
+      el: '#movies',
+      router: this
     });
   }
 });

@@ -13,7 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "backbone": "^1.1.2",
+    "browser-sync": "^1.5.2",
+    "gulp": "^3.8.8",
     "jquery": "^2.1.1",
+    "mocha": "^1.21.4",
     "pushstate-server": "^1.1.0",
     "underscore": "*",
     "watchify": "^1.0.2"

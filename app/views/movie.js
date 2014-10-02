@@ -8,6 +8,7 @@ MovieView = Backbone.View.extend({
   tagName: 'article',
   className: 'movie',
   template: '<h1><%= title %><hr></h1>',
+
   render: function () {
     var tmpl;
     tmpl = _.template(this.template);
@@ -15,17 +16,21 @@ MovieView = Backbone.View.extend({
     this.$el.toggleClass('selected', this.model.get('selected'));
     return this;
   },
-  initialize: function () {
+
+  initialize: function (options) {
+    this.router = options.router;
     this.listenTo(this.model, 'change:selected', this.render);
   },
   events: {
     'click': '_selectMovie'
   },
+
   _selectMovie: function (e) {
     e.preventDefault();
     if (!this.model.get('selected')) {
       this.model.collection.resetSelected();
       this.model.collection.selectByID(this.model.id);
+      this.router.navigate('/movies/' + this.model.id, { trigger: true });
     }
   }
 });

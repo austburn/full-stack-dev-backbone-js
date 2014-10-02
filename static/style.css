@@ -1,6 +1,6 @@
 .movie {
-  width: 90px;
-  height: 90px;
+  width: 200px;
+  height: 110px;
   background-color: #3D9970;
   color: white;
   margin: 10px;
@@ -15,6 +15,13 @@
 .selected {
   border: 2px #01FF70 solid;
 }
-#movies {
-  width: 120px;
+#overview {
+  width: 200px;
+  float: left;
+}
+#details {
+  margin-top: 60px;
+  margin-left: 60px;
+  width: 400px;
+  float: left;
 }

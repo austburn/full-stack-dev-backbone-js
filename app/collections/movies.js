@@ -18,6 +18,20 @@ Movies = Backbone.Collection.extend({
     this.resetSelected();
     var movie = this.get(id);
     movie.set({'selected': true});
+  },
+
+  sortByTitle: function () {
+    return this.sortBy('title');
+  },
+
+  sortByRating: function () {
+    return this.sortBy(function (mov) {
+      return 10 - mov.get('rating');
+    });
+  },
+
+  sortByShowtime: function () {
+    return this.sortBy('showtime');
   }
 });
 module.exports = Movies;
