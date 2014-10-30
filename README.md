@@ -6,8 +6,9 @@ Currently, this pretty much only uses ExpressJS and browserify. To run:
 ```
 # Get all the packages you'll need
 npm install
-# Use browserify to bundle our javascript code
-browserify -r ./app/main.js:app > ./static/bundle.js
-
-node server/app.js
+# Use gulp to start
+gulp
 ```
+### About Gulp
+Gulp uses a couple tools to set up a development server. I use ```watchify``` (which is based on ```browserify```)
+to monitor changes to the codebase and rebundle as needed. This prevents your from having to rebuild Javascript everytime you change something. I also use ```pushstate-server``` to use the HTML5 History API.
