@@ -1,15 +1,14 @@
-var gulp, browserify, server, gutil, source, watchify;
+var gulp, gutil, source, browserify, server, gutil, source,
+  watchify;
 
 gulp = require('gulp');
+gutil = require('gutil');
+source = require('vinyl-source-stream');
 browserify = require('browserify');
 server = require('pushstate-server');
-gutil = require('gulp-util');
-source = require('vinyl-source-stream');
 watchify = require('watchify');
 
-// gulp.task('default', function () {
-
-// });
+gulp.task('default', ['serve']);
 
 gulp.task('watch', function() {
   var bundler = watchify(browserify('./app/main.js', watchify.args));
