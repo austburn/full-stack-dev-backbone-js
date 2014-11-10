@@ -16,7 +16,8 @@
   border: 2px #01FF70 solid;
 }
 #overview {
-  width: 200px;
+  min-width: 200px;
+  min-height: 1000px;
   float: left;
 }
 #details {
@@ -24,4 +25,9 @@
   margin-left: 60px;
   width: 400px;
   float: left;
+  padding: 10px;
+  border: 3px solid black;
+}
+.loading {
+  background-color: #ccc;
 }
