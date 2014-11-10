@@ -34,7 +34,7 @@ gulp.task('jshint', function () {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('watch', ['lint'], function() {
+gulp.task('watch', function() {
   var bundler = watchify(browserify('./app/main.js', watchify.args));
 
   bundler.on('update', rebundle);
