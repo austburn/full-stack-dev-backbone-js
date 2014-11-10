@@ -1,4 +1,4 @@
-var Backbone, ControlsView;
+var Backbone, _, $, ControlsView;
 
 Backbone = require('backbone');
 _ = require('underscore');
@@ -24,12 +24,12 @@ ControlsView = Backbone.View.extend({
     this.collection.reset(this.collection.sortByShowtime());
   },
 
-  selectGenre: function (ev) {
+  selectGenre: function () {
     var genre;
 
     genre = $('select[name="genre"]').val();
 
-    if (genre === "all") {
+    if (genre === 'all') {
       this.collection.reset(this.superset.toJSON());
     }
     else {
@@ -43,7 +43,7 @@ ControlsView = Backbone.View.extend({
     var filtered;
 
     filtered = this.collection.filter(function (mov) {
-      return _.indexOf(mov.get('genres'), genre) !== -1
+      return _.indexOf(mov.get('genres'), genre) !== -1;
     });
     this.collection.reset(filtered);
   },

@@ -1,4 +1,4 @@
-var Backbone, _, MoviesList, Layout, DetailsView, ChoseView, instance;
+var Backbone, _, MoviesList, Layout, DetailsView, ChoseView, ControlsView, instance;
 
 Backbone = require('backbone');
 _ = require('underscore');
@@ -74,5 +74,5 @@ Layout.getInstance = function (options) {
     });
   }
   return instance;
-}
+};
 module.exports = Layout;
