@@ -15,6 +15,10 @@ Movie = Backbone.Model.extend({
     length: 0
   },
 
+  idAttribute: '_key',
+
+  urlRoot: '/api/movies',
+
   toShowtimeDate: function () {
     var d = new Date();
     d.setUTCSeconds(this.get('showtime'));

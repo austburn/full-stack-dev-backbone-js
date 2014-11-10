@@ -3,11 +3,13 @@ var Backbone, Movies, Layout, MoviesRouter;
 Backbone = require('backbone');
 Movies = require('collections/movies');
 Layout = require('views/layout');
+Movie = require('models/movie');
 
 MoviesRouter = Backbone.Router.extend({
   routes: {
-    'movies/:id': 'selectMovie',
-    '':           'showMain'
+    'movies/:id':   'selectMovie',
+    '':             'showMain',
+    'details/:key': 'showDetails'
   },
 
   selectMovie: function (id) {
@@ -19,6 +21,12 @@ MoviesRouter = Backbone.Router.extend({
   showMain: function () {
     this.movies.resetSelected();
     this.layout.setChose();
+  },
+
+  showDetails: function(key) {
+    var movie = new Movie({_key: key});
+    this.listenTo(movie, 'all', function(ev) { console.log(ev) });
+    movie.fetch();
   },
 
   initialize: function () {

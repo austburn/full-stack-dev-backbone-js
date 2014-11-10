@@ -1,6 +1,6 @@
 var gulp, gutil, source, browserify, server, gutil, source,
   watchify, jscs, jshint, stylish, http, express, app, url,
-  proxy, logger;
+  proxy, logger, run;
 
 gulp = require('gulp');
 gutil = require('gutil');
@@ -17,6 +17,7 @@ app = express();
 url = require('url');
 proxy = require('proxy-middleware');
 logger = require('morgan');
+run = require('gulp-run');
 
 gulp.task('default', ['serve']);
 
@@ -28,7 +29,7 @@ gulp.task('jscs', function () {
 });
 
 gulp.task('jshint', function () {
-  return gulp.src('./app/**/*.js')
+  return gulp.src(['./app/**/*.js', './Gulpfile.js'])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(stylish))
     .pipe(jshint.reporter('fail'));
@@ -37,8 +38,6 @@ gulp.task('jshint', function () {
 gulp.task('watch', function() {
   var bundler = watchify(browserify('./app/main.js', watchify.args));
 
-  bundler.on('update', rebundle);
-
   function rebundle() {
     return bundler.bundle()
       // log errors if they happen
@@ -46,6 +45,7 @@ gulp.task('watch', function() {
       .pipe(source('bundle.js'))
       .pipe(gulp.dest('./static'));
   }
+  bundler.on('update', rebundle);
 
   return rebundle();
 });
@@ -53,11 +53,11 @@ gulp.task('watch', function() {
 gulp.task('serve', ['watch'], function () {
   server.start({
     port: 7111,
-    directory: './static'
+    directory: './'
   });
 });
 
-gulp.task('server', ['watch'], function () {
+gulp.task('server', ['watch', 'api'], function () {
   app.use(logger({ immediate: true, format: 'dev' }));
   app.use('/api', proxy(url.parse('http://0.0.0.0:7001/api/')));
 
@@ -68,4 +68,8 @@ gulp.task('server', ['watch'], function () {
   http.createServer(app).listen(port, function() {
     console.log('Frontend listening at %s', port);
   });
+});
+
+gulp.task('api', function () {
+  run('node apiServer.js').exec();
 });
