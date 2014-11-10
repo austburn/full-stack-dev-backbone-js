@@ -1,15 +1,18 @@
 var Backbone, Movie, Movies;
 
 Backbone = require('backbone');
+Backbone.Firebase = require('./backbone_firebase');
 Movie = require('models/movie');
 
-Movies = Backbone.Collection.extend({
+Movies = Backbone.Firebase.Collection.extend({
   model: Movie,
+
+  firebase: 'https://resplendent-torch-5063.firebaseio.com/',
 
   //Unselect all models
   resetSelected: function () {
     this.each(function (model) {
-      model.set({'selected': false})
+      model.set({'selected': false});
     });
   },
 
