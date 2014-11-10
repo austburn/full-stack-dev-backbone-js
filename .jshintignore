@@ -1,0 +1,2 @@
+app/collections/backbone_firebase.js
+app/node_modules/**/*
