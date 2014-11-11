@@ -35,7 +35,7 @@ MoviesRouter = Backbone.Router.extend({
     this._initializeMovies();
 
     this.layout = Layout.getInstance({
-      el: '#movies',
+      el: '.container',
       router: this
     });
   },

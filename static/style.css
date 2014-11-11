@@ -1,3 +1,6 @@
+.container {
+  padding-top: 20px;
+}
 .movie {
   width: 200px;
   height: 110px;
@@ -14,19 +17,6 @@
 }
 .selected {
   border: 2px #01FF70 solid;
-}
-#movies {
-  min-width: 200px;
-  min-height: 1000px;
-  float: left;
-}
-#details {
-  margin-top: 60px;
-  margin-left: 60px;
-  width: 400px;
-  float: left;
-  padding: 10px;
-  border: 3px solid black;
 }
 .loading {
   background-color: #ccc;

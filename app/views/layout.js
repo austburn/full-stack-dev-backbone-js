@@ -9,25 +9,9 @@ ChooseView = require('views/choose');
 ControlsView = require('views/controls');
 
 Layout = Backbone.View.extend({
-  template: _.template(
-    '<header>' +
-      '<a href="#">Home</a>' +
-      '<nav id="controls">' +
-        '<button id="sort-by-title">Sort By Title</button>' +
-        '<button id="sort-by-rating">Sort By Rating</button>' +
-        '<button id="sort-by-showtime">Sort By Showtime</button>' +
-        '<select name="genre">' +
-          '<option value="all">All</option>' +
-          '<option value="Drama">Drama</option>' +
-          '<option value="Action">Action</option>' +
-        '</select>' +
-      '</nav>' +
-    '</header>' +
-    '<div id="movies"></div><div id="details"></div>'
-  ),
+  className: 'container',
 
   render: function () {
-    this.$el.html(this.template());
     this.currentDetails.setElement(this.$('#details')).render();
     this.moviesList.setElement(this.$('#movies')).render();
     this.controls.setElement(this.$('#controls')).render();

@@ -4,9 +4,36 @@
   <meta charset="utf-8">
   <title>fs-backbone</title>
   <link rel="stylesheet" href="style.css" type="text/css">
+  <link rel="stylesheet" href="skeleton.css" type="text/css">
+  <link rel="stylesheet" href="base.css" type="text/css">
+  <link rel="stylesheet" href="layout.css" type="text/css">
   <script src="bundle.js"></script>
 </head>
 <body>
-  <div id="movies"></div>
+  <div class="container">
+    <div class="sixteen columns">
+      <h1>fs-backbone</h1>
+    </div>
+    <div class="sixteen columns">
+      <div class="two columns alpha" id="controls">
+        <button id="sort-by-title" class="full-width button">Sort By Title</button>
+        <button id="sort-by-rating" class="full-width button">Sort By Rating</button>
+        <button id="sort-by-showtime" class="full-width button">Sort By Showtime</button>
+        <select name="genre">
+          <option value="all">All</option>
+          <option value="Drama">Drama</option>
+          <option value="Action">Action</option>
+        </select>
+      </div>
+      <div class="four columns">
+        <div class="four columns">
+          <div class="two columns alpha" style="text-align:left;font-size:xx-large;" id="prev">&#8592;</div>
+          <div class="two columns omega" style="text-align:right;font-size:xx-large;" id="next">&#8594;</div>
+        </div>
+        <div class="four columns" id="movies"></div>
+      </div>
+      <div class="eight columns" id="details"></div>
+    </div>
+  </div>
 </body>
 </html>

@@ -7,7 +7,7 @@ _ = require('underscore');
 MovieView = Backbone.View.extend({
   tagName: 'article',
   className: 'movie',
-  template: '<h1><%= title %><hr></h1>',
+  template: '<h4><%= title %><hr></h4>',
 
   render: function () {
     var tmpl;
