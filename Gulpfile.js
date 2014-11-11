@@ -24,12 +24,12 @@ gulp.task('default', ['serve']);
 gulp.task('lint', ['jscs', 'jshint']);
 
 gulp.task('jscs', function () {
-  gulp.src('app/*')
+  gulp.src(['./app/**/*.js', './*.js'])
     .pipe(jscs());
 });
 
 gulp.task('jshint', function () {
-  return gulp.src(['./app/**/*.js', './Gulpfile.js'])
+  return gulp.src(['./app/**/*.js', './*.js'])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter(stylish))
     .pipe(jshint.reporter('fail'));
