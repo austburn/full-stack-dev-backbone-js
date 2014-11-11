@@ -15,7 +15,7 @@
 .selected {
   border: 2px #01FF70 solid;
 }
-#overview {
+#movies {
   min-width: 200px;
   min-height: 1000px;
   float: left;

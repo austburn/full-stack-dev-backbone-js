@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "backbone": "^1.1.2",
+    "backbone.obscura": "^1.0.1",
     "bluebird": "^2.3.11",
     "browser-sync": "^1.5.2",
     "client-firebase": "^1.0.1",

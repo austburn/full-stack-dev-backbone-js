@@ -1,8 +1,9 @@
-var Backbone, _, $, ControlsView;
+var Backbone, _, $, ControlsView, Movies;
 
 Backbone = require('backbone');
 _ = require('underscore');
 $ = Backbone.$;
+Movies = require('collections/movies');
 
 ControlsView = Backbone.View.extend({
   events: {
@@ -13,15 +14,15 @@ ControlsView = Backbone.View.extend({
   },
 
   sortByTitle: function () {
-    this.collection.reset(this.collection.sortByTitle());
+    this.collection.setSort('title');
   },
 
   sortByRating: function () {
-    this.collection.reset(this.collection.sortByRating());
+    this.collection.setSort('rating');
   },
 
   sortByShowtime: function () {
-    this.collection.reset(this.collection.sortByShowtime());
+    this.collection.setSort('showtime');
   },
 
   selectGenre: function () {
@@ -29,27 +30,10 @@ ControlsView = Backbone.View.extend({
 
     genre = $('select[name="genre"]').val();
 
-    if (genre === 'all') {
-      this.collection.reset(this.superset.toJSON());
-    }
-    else {
-      this.collection.reset(this.superset.toJSON());
-      this.filterByCategory(genre);
-    }
-
-  },
-
-  filterByCategory: function (genre) {
-    var filtered;
-
-    filtered = this.collection.filter(function (mov) {
-      return _.indexOf(mov.get('genres'), genre) !== -1;
+    this.collection.removeFilter('genre');
+    this.collection.filterBy('genre', function (movie) {
+      return movie.get('genres').indexOf(genre) !== -1 || genre === 'all';
     });
-    this.collection.reset(filtered);
-  },
-
-  initialize: function (options) {
-    this.superset = options.superset;
   }
 });
 module.exports = ControlsView;

@@ -27,6 +27,25 @@ Movie = Backbone.Model.extend({
 
   showtimeToString: function () {
     return this.toShowtimeDate().toLocaleString();
+  },
+
+  voteMovie: function (rating) {
+    var _update;
+
+    _update = function () {
+      this.set({
+        rating: rating
+      });
+    };
+
+    this.save({
+      type: 'PUT',
+      url: '/movies' + this.id,
+      contentType: 'application/json',
+      data: JSON.stringify({ vote: rating })
+    })
+    .then(_update)
+    .fail(function (err) { console.log(err); });
   }
 });
 module.exports = Movie;

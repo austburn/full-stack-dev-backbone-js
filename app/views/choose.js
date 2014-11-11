@@ -1,8 +1,8 @@
-var Backbone, ChoseView;
+var Backbone, ChooseView;
 
 Backbone = require('backbone');
 
-ChoseView = Backbone.View.extend({
+ChooseView = Backbone.View.extend({
   template: '<h1>Welcome to Cinema</h1><h2>Please choose a movie...</h2>',
   className: 'details',
   render: function () {
@@ -10,4 +10,4 @@ ChoseView = Backbone.View.extend({
     return this;
   }
 });
-module.exports = ChoseView;
+module.exports = ChooseView;

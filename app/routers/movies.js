@@ -1,4 +1,4 @@
-var Backbone, Movies, Layout, MoviesRouter;
+var Backbone, Movies, Layout, Movie, MoviesRouter;
 
 Backbone = require('backbone');
 Movies = require('collections/movies');
@@ -7,15 +7,8 @@ Movie = require('models/movie');
 
 MoviesRouter = Backbone.Router.extend({
   routes: {
-    'movies/:id':   'selectMovie',
     '':             'showMain',
     'details/:key': 'showDetails'
-  },
-
-  selectMovie: function (id) {
-    this.layout.render();
-    this.movies.selectByID(id);
-    this.layout.setDetails(this.movies.get(id));
   },
 
   showMain: function () {
@@ -24,16 +17,41 @@ MoviesRouter = Backbone.Router.extend({
   },
 
   showDetails: function(key) {
-    var movie = new Movie({_key: key});
-    this.listenTo(movie, 'all', function(ev) { console.log(ev) });
-    movie.fetch();
+    var movie, updateDetails;
+
+    updateDetails = function (model) {
+      this.layout.setDetails(model);
+    }.bind(this);
+
+    this.layout.render();
+    movie = new Movie({_key: key});
+    movie.fetch({
+      success: updateDetails
+    });
+
   },
 
   initialize: function () {
-    this.movies = new Movies();
+    this._initializeMovies();
+
     this.layout = Layout.getInstance({
       el: '#movies',
       router: this
+    });
+  },
+
+  _initializeMovies: function () {
+    var deferReset;
+
+    deferReset = function (results) {
+      this.movies.reset(results);
+      this.layout.render();
+    }.bind(this);
+
+    this.movies = new Movies();
+    this.deferred = this.movies.fetch();
+    this.deferred.done(function (results) {
+      deferReset(results);
     });
   }
 });

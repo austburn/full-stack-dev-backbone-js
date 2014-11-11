@@ -1,10 +1,11 @@
-var Backbone, _, MoviesList, Layout, DetailsView, ChoseView, ControlsView, instance;
+var Backbone, _, MoviesList, Layout, DetailsView, ChooseView, ControlsView, instance;
 
 Backbone = require('backbone');
+Backbone.Obscura = require('backbone.obscura');
 _ = require('underscore');
 MoviesList = require('views/moviesList');
 DetailsView = require('views/details');
-ChoseView = require('views/chose');
+ChooseView = require('views/choose');
 ControlsView = require('views/controls');
 
 Layout = Backbone.View.extend({
@@ -22,27 +23,28 @@ Layout = Backbone.View.extend({
         '</select>' +
       '</nav>' +
     '</header>' +
-    '<div id="overview"></div><div id="details"></div>'
+    '<div id="movies"></div><div id="details"></div>'
   ),
 
   render: function () {
     this.$el.html(this.template());
     this.currentDetails.setElement(this.$('#details')).render();
-    this.overview.setElement(this.$('#overview')).render();
+    this.moviesList.setElement(this.$('#movies')).render();
     this.controls.setElement(this.$('#controls')).render();
 
     return this;
   },
 
   initialize: function (options) {
-    this.overview = new MoviesList({
-      collection: options.router.movies,
+    this.proxy = new Backbone.Obscura(options.router.movies);
+
+    this.moviesList = new MoviesList({
+      collection: this.proxy,
       router: options.router
     });
-    this.currentDetails = new ChoseView();
+    this.currentDetails = new ChooseView();
     this.controls = new ControlsView({
-      collection: options.router.movies,
-      superset: new Backbone.Collection(options.router.movies.models)
+      collection: this.proxy
     });
   },
 
@@ -54,7 +56,7 @@ Layout = Backbone.View.extend({
 
   setChose: function () {
     this._disposeDetails();
-    this.currentDetails = new ChoseView();
+    this.currentDetails = new ChooseView();
     this.render();
   },
 

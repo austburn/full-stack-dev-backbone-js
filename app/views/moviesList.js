@@ -23,7 +23,7 @@ MoviesList = Backbone.View.extend({
 
     this.$el.addClass('loading');
 
-    this.listenTo(this.collection, 'reset', this.render);
+    this.listenTo(this.collection, 'reset change', this.render);
     this.listenTo(this.collection, 'sync', function () {
       this.$el.removeClass('loading');
       this.render();
