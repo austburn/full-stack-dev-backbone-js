@@ -58,7 +58,7 @@ gulp.task('serve', ['watch'], function () {
 });
 
 gulp.task('server', ['watch', 'api'], function () {
-  app.use(logger({ immediate: true, format: 'dev' }));
+  app.use(logger('dev', { immediate: true }));
   app.use('/api', proxy(url.parse('http://0.0.0.0:7001/api/')));
 
   app.use(express.static(__dirname + '/static'));
