@@ -72,7 +72,7 @@ _addVote = function (key) {
 DS = function () {};
 
 DS.prototype.allMovies = function () {
-  return Movies.map(_mapAttributes);
+  return Movies.map(_mapAllAttributes);
 };
 
 DS.prototype.allGenres = function() {
@@ -91,6 +91,7 @@ DS.prototype.find = function(key) {
 DS.prototype.voteMovie = function (key) {
   return Movies.then(function () {
     _addVote(key);
+    return {'msg': '200 OK'};
   });
 };
 

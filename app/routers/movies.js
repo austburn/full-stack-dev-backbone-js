@@ -17,18 +17,13 @@ MoviesRouter = Backbone.Router.extend({
   },
 
   showDetails: function(key) {
-    var movie, updateDetails;
+    var movie;
 
-    updateDetails = function (model) {
-      this.layout.setDetails(model);
-    }.bind(this);
+    movie = this.movies.get(key);
+
+    this.layout.setDetails(movie);
 
     this.layout.render();
-    movie = new Movie({_key: key});
-    movie.fetch({
-      success: updateDetails
-    });
-
   },
 
   initialize: function () {

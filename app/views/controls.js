@@ -10,7 +10,9 @@ ControlsView = Backbone.View.extend({
     'click #sort-by-title': 'sortByTitle',
     'click #sort-by-rating': 'sortByRating',
     'click #sort-by-showtime': 'sortByShowtime',
-    'change select[name="genre"]': 'selectGenre'
+    'change select[name="genre"]': 'selectGenre',
+    'click #next-page': 'nextPage',
+    'click #prev-page': 'prevPage'
   },
 
   sortByTitle: function () {
@@ -34,6 +36,32 @@ ControlsView = Backbone.View.extend({
     this.collection.filterBy('genre', function (movie) {
       return movie.get('genres').indexOf(genre) !== -1 || genre === 'all';
     });
+  },
+
+  checkPagination: function () {
+    this.nextPageButton.disabled = !this.collection.hasNextPage();
+    this.prevPageButton.disabled = !this.collection.hasPrevPage();
+  },
+
+  nextPage: function (e) {
+    this.checkPagination();
+    if (this.collection.hasNextPage()) {
+      this.collection.nextPage();
+    }
+  },
+
+  prevPage: function (e) {
+    this.checkPagination();
+
+    if (this.collection.hasPrevPage()) {
+      this.collection.prevPage();
+    }
+  },
+
+  initialize: function () {
+    this.collection.setPerPage(5);
+    this.nextPageButton = this.$('#next-page');
+    this.prevPageButton = this.$('#prev-page');
   }
 });
 module.exports = ControlsView;

@@ -29,23 +29,12 @@ Movie = Backbone.Model.extend({
     return this.toShowtimeDate().toLocaleString();
   },
 
-  voteMovie: function (rating) {
-    var _update;
+  upvoteMovie: function () {
+    var newRating;
 
-    _update = function () {
-      this.set({
-        rating: rating
-      });
-    };
+    newRating = this.get('rating') + 1;
 
-    this.save({
-      type: 'PUT',
-      url: '/movies' + this.id,
-      contentType: 'application/json',
-      data: JSON.stringify({ vote: rating })
-    })
-    .then(_update)
-    .fail(function (err) { console.log(err); });
+    this.save({ 'rating': newRating });
   }
 });
 module.exports = Movie;

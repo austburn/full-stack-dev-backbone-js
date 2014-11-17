@@ -21,3 +21,29 @@
 .loading {
   background-color: #ccc;
 }
+button[disabled] {
+  background: #f4f4f4 !important; /* Old browsers */
+  background: #f4f4f4 -moz-linear-gradient(top, rgba(255,255,255,.2) 0%, rgba(0,0,0,.2) 100%) !important; /* FF3.6+ */
+  background: #f4f4f4 -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,.2)), color-stop(100%,rgba(0,0,0,.2))) !important; /* Chrome,Safari4+ */
+  background: #f4f4f4 -webkit-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(0,0,0,.2) 100%) !important; /* Chrome10+,Safari5.1+ */
+  background: #f4f4f4 -o-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(0,0,0,.2) 100%) !important; /* Opera11.10+ */
+  background: #f4f4f4 -ms-linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(0,0,0,.2) 100%) !important; /* IE10+ */
+  background: #f4f4f4 linear-gradient(top, rgba(255,255,255,.2) 0%,rgba(0,0,0,.2) 100%) !important; /* W3C */
+  border: 1px solid #aaa !important;
+  border-top: 1px solid #ccc !important;
+  border-left: 1px solid #ccc !important;
+  -moz-border-radius: 3px !important;
+  -webkit-border-radius: 3px !important;
+  border-radius: 3px !important;
+  color: #bbb !important;
+  display: inline-block !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+  text-shadow: 0 1px rgba(255, 255, 255, .75) !important;
+  cursor: pointer !important;
+  margin-bottom: 20px !important;
+  line-height: normal !important;
+  padding: 8px 10px !important;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif !important; }
+}

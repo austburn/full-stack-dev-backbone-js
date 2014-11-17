@@ -21,13 +21,13 @@ Layout = Backbone.View.extend({
 
   initialize: function (options) {
     this.proxy = new Backbone.Obscura(options.router.movies);
-
     this.moviesList = new MoviesList({
       collection: this.proxy,
       router: options.router
     });
     this.currentDetails = new ChooseView();
     this.controls = new ControlsView({
+      el: '#controls',
       collection: this.proxy
     });
   },
@@ -46,7 +46,7 @@ Layout = Backbone.View.extend({
 
   _disposeDetails: function () {
     if (this.currentDetails) {
-      this.currentDetails.remove();
+      this.currentDetails.undelegateEvents();
     }
   }
 });

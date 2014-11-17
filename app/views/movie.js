@@ -7,7 +7,7 @@ _ = require('underscore');
 MovieView = Backbone.View.extend({
   tagName: 'article',
   className: 'movie',
-  template: '<h4><%= title %><hr></h4>',
+  template: '<h5><%= title %></h5><hr><a href="#" class="vote">+1</a>',
 
   render: function () {
     var tmpl;
@@ -22,7 +22,8 @@ MovieView = Backbone.View.extend({
     this.listenTo(this.model, 'change:selected', this.render);
   },
   events: {
-    'click': '_selectMovie'
+    'click': '_selectMovie',
+    'click .vote': '_upvote'
   },
 
   _selectMovie: function (e) {
@@ -32,6 +33,11 @@ MovieView = Backbone.View.extend({
       this.model.collection.selectByID(this.model.id);
       this.router.navigate('/details/' + this.model.id, { trigger: true });
     }
+  },
+
+  _upvote: function (e) {
+    e.preventDefault();
+    this.model.upvoteMovie();
   }
 });
 module.exports = MovieView;
