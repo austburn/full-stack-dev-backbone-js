@@ -1,98 +1,123 @@
-var fs, filename, _, bPromise, sha1, Movies, _mapAttributes,
-  _mapAllAttributes, _find, _genres, _addVote, DS;
+var fs, filename, _, Promise, sha1, bcrypt, Users, DS;
 
 fs = require('fs');
 _ = require('underscore');
-bPromise = require('bluebird');
+Promise = require('promise');
 sha1 = require('sha1');
+bcrypt = require('bcrypt');
 filename = './movies.json';
 
-// Generates a set of fs functions appended with Async
-// and wraps that function in a promise
-bPromise.promisifyAll(fs);
-
-Movies = fs.readFileAsync(filename, 'utf-8').then(JSON.parse);
-
-_mapAttributes = function (movie) {
-  return {
-    id: movie.id,
-    title: movie.title,
-    showtime: movie.showtime,
-    genres: movie.genres,
-    _key: sha1(movie.title)
-  };
-};
-
-_mapAllAttributes = function (movie) {
-  return {
-    title: movie.title,
-    description: movie.description,
-    showtime: movie.showtime,
-    rating: movie.rating,
-    genres: movie.genres,
-    _key: sha1(movie.title),
-  };
-};
-
-_find = function (movies, key) {
-  var match;
-
-  match = _.find(movies, function (movie ) {
-    return sha1(movie.title) === key;
-  });
-
-  if (!match) {
-    throw bPromise.RejectionError('ID not found!');
-  } else {
-    return match;
-  }
-};
-
-_genres = function (movies) {
-  return _.chain(movies)
-          .map(function (movie) {
-            return movie.genres;
-          })
-          .flatten()
-          .uniq()
-          .value();
-};
-
-_addVote = function (key) {
-  Movies.then(function (movies) {
-    var match;
-
-    match = _find(movies, key);
-    match.rating += 1;
-
-    return match;
-  });
-};
+Users = [];
 
 DS = function () {};
 
-DS.prototype.allMovies = function () {
-  return Movies.map(_mapAllAttributes);
-};
+DS.prototype.movies = new Promise(function (fulfill, reject) {
+  fs.readFile(filename, 'utf-8', function (err, res) {
+    if (err) {
+      reject(err);
+    } else {
+      fulfill(JSON.parse(res));
+    }
+  });
+});
 
-DS.prototype.allGenres = function() {
-  return Movies.then(function (movies) {
-    return _genres(movies);
+DS.prototype.getMovies = function () {
+  return this.movies.then(function (movies) {
+    var mapped = movies.map(function (m) {
+      return {
+        title: m.title,
+        description: m.description,
+        showtime: m.showtime,
+        rating: m.rating,
+        genres: m.genres,
+        _key: sha1(m.title)
+      };
+    });
+    return mapped;
   });
 };
 
-DS.prototype.find = function(key) {
-  return Movies.then(function (movies) {
-    return _find(movies, key);
-  })
-  .then(_mapAllAttributes);
+DS.prototype.getGenres = function () {
+  return this.movies.then(function (movies) {
+    var genres;
+
+    genres = movies.map(function (m) {
+      return m.genres;
+    });
+
+    return _.chain(genres)
+             .flatten()
+             .uniq()
+             .value();
+  });
 };
 
-DS.prototype.voteMovie = function (key) {
-  return Movies.then(function () {
-    _addVote(key);
-    return {'msg': '200 OK'};
+DS.prototype.getMovie = function (key) {
+  return this.movies.then(function (movies) {
+    var match;
+    match = _.find(movies, function (movie) {
+      return sha1(movie.title) === key;
+    });
+
+    return new Promise(function (resolve, reject) {
+      if (_.isUndefined(match)) {
+        reject('Resource not found.');
+      } else {
+        resolve(match);
+      }
+    });
   });
+};
+
+DS.prototype.addVote = function (key) {
+  return this.getMovie(key).then(
+    function (m) {
+      m.rating += 1;
+      return m;
+    }
+  );
+};
+
+DS.prototype.isDuplicateUser = function (credentials) {
+  var username, user;
+
+  username = credentials.username;
+  user = _.findWhere(Users, {username: username});
+
+  return new Promise(function (resolve, reject) {
+    if (_.isUndefined(user)) {
+      resolve(credentials);
+    } else {
+      reject('Username is taken.');
+    }
+  });
+};
+
+DS.prototype.createUser = function (body) {
+  var credentials;
+  credentials = JSON.parse(body);
+
+  return this.isDuplicateUser(credentials).then(
+    function () {
+      var user;
+
+      user = {
+        userId:   Users.length + 1,
+        username: credentials.username,
+        email:    credentials.email
+      };
+
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(credentials.password, salt, function (err, hash) {
+          user.password = hash;
+
+          Users.push(user);
+        });
+      });
+
+      return {id: user.userId, username: user.username};
+    }
+  );
 };
 
 module.exports = DS;

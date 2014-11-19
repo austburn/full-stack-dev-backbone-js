@@ -43,14 +43,14 @@ ControlsView = Backbone.View.extend({
     this.prevPageButton.disabled = !this.collection.hasPrevPage();
   },
 
-  nextPage: function (e) {
+  nextPage: function () {
     this.checkPagination();
     if (this.collection.hasNextPage()) {
       this.collection.nextPage();
     }
   },
 
-  prevPage: function (e) {
+  prevPage: function () {
     this.checkPagination();
 
     if (this.collection.hasPrevPage()) {

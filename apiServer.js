@@ -15,29 +15,38 @@ server.use(restify.fullResponse());
 server.use(restify.bodyParser());
 
 server.get('/api/movies', function (req, res) {
-  return datastore.allMovies()
-    .then(function(m) { res.send(m); })
-    .catch(function(err) { res.send(500, err); });
+  return datastore.getMovies()
+    .then(function (m) { res.send(m); });
 });
 
 server.get('/api/genres', function (req, res) {
-  datastore.allGenres()
+  datastore.getGenres()
     .then(function (m) { res.send(m); })
     .catch(function (err) { res.send(500, err); });
 });
 
 server.get('/api/movies/:key', function (req, res) {
-  return datastore.find(req.params.key)
-    .then(function (m) { res.send(m); })
-    .error(function (e) { res.send(404, {err: e.message}); })
-    .catch(function (err) { res.send(500, err); });
+  return datastore.getMovie(req.params.key)
+    .then(
+      function (m) { res.send(m); },
+      function (e) { res.send({statusCode: 404, error: e}); }
+    );
 });
 
-server.put('api/movies/:key', function (req, res) {
-  return datastore.voteMovie(req.params.key)
-    .then(function (m) { res.send(m); })
-    .error(function (e) { res.send(404, {err: e.message}); })
-    .catch(function (err) { res.send(500, err); });
+server.put('/api/movies/:key', function (req, res) {
+  return datastore.addVote(req.params.key)
+    .then(
+      function (m) { res.send(m); },
+      function (e) { res.send({statusCode: 404, err: e}); }
+    );
+});
+
+server.post('/api/users/create', function (req, res) {
+  datastore.createUser(req.body)
+    .then(
+      function (user) { res.send({id: user.id, username: user.username }); },
+      function (e) { res.send({statusCode: 404, err: e}); }
+    );
 });
 
 server.listen(port, function () {
