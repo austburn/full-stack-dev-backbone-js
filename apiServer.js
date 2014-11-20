@@ -49,6 +49,20 @@ server.post('/api/users/create', function (req, res) {
     );
 });
 
+server.post('/api/auth/session', function (req, res) {
+  datastore.authenticateUser(req.body)
+    .then(
+      function (user) {
+        res.header('Set-Cookie', 'session=' + user.token + '; expires=Thu, 1 Aug 2030 20:00:00 UTC; path=/; HttpOnly');
+        res.send({ id: user.id, username: user.username, auth: 'success'});
+      },
+      function () {
+        res.header('Set-Cookie', 'session=; HttpOnly');
+        res.send({statusCode: 403, err: 'Auth Failed'});
+      }
+    );
+});
+
 server.listen(port, function () {
   console.log('%s listening at %s', server.name, server.url);
 });

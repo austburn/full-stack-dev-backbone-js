@@ -82,7 +82,7 @@ DS.prototype.isDuplicateUser = function (credentials) {
   var username, user;
 
   username = credentials.username;
-  user = _.findWhere(Users, {username: username});
+  user = this._findUser(username);
 
   return new Promise(function (resolve, reject) {
     if (_.isUndefined(user)) {
@@ -118,6 +118,41 @@ DS.prototype.createUser = function (body) {
       return {id: user.userId, username: user.username};
     }
   );
+};
+
+DS.prototype.authenticateUser = function (body) {
+  var credentials;
+  credentials = JSON.parse(body);
+
+  return this._isPasswordValid(credentials).then(this._generateToken);
+};
+
+DS.prototype._generateToken = function (user) {
+  var token;
+
+  token = sha1(_.now().toString());
+  user.token = token;
+
+  return user;
+};
+
+DS.prototype._isPasswordValid = function (credentials) {
+  var user;
+  user = this._findUser(credentials.username);
+
+  return new Promise(function (resolve, reject) {
+    bcrypt.compare(credentials.password, user.password, function (err, res) {
+      if (res) {
+        resolve(user);
+      } else {
+        reject('Username or password is incorrect.');
+      }
+    });
+  });
+};
+
+DS.prototype._findUser = function (username) {
+  return _.findWhere(Users, {username: username});
 };
 
 module.exports = DS;
