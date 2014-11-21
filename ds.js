@@ -127,6 +127,17 @@ DS.prototype.authenticateUser = function (body) {
   return this._isPasswordValid(credentials).then(this._generateToken);
 };
 
+DS.prototype.confirmSession = function (req) {
+  return this._hasValidSession(req);
+};
+
+DS.prototype.clearSession = function (req) {
+  return this._hasValidSession(req).then(function (user) {
+    user.token = null;
+    return user;
+  });
+};
+
 DS.prototype._generateToken = function (user) {
   var token;
 
@@ -153,6 +164,39 @@ DS.prototype._isPasswordValid = function (credentials) {
 
 DS.prototype._findUser = function (username) {
   return _.findWhere(Users, {username: username});
+};
+
+DS.prototype._getCookies = function (req) {
+  var cookies;
+
+  cookies = {};
+
+  if (req.headers && req.headers.cookie) {
+    req.headers.cookie.split(';').forEach(function (cookie) {
+      var parts;
+
+      parts = cookie.match(/(.*?)=(.*)$/);
+
+      cookies[parts[1].trim()] = (parts[2] || '').trim();
+    });
+  }
+
+  return cookies;
+};
+
+DS.prototype._hasValidSession = function (req) {
+  var cookies, user;
+  cookies = this._getCookies(req);
+
+  user = _.findWhere(Users, {token: cookies.session});
+
+  return new Promise(function (resolve, reject) {
+    if (user) {
+      resolve(user);
+    } else {
+      reject('Invalid session');
+    }
+  });
 };
 
 module.exports = DS;

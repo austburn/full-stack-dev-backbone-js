@@ -63,6 +63,27 @@ server.post('/api/auth/session', function (req, res) {
     );
 });
 
+server.get('/api/auth/session', function (req, res) {
+  datastore.confirmSession(req).
+    then(
+      function (user) { res.send({ id: user.id, username: user.username, auth: 'success'}); },
+      function (e) { res.send({statusCode: 404, err: e}); }
+    );
+});
+
+server.del('/api/auth/session', function (req, res) {
+  datastore.clearSession(req).
+    then(
+      function () {
+        res.header('Set-Cookie', 'session=; HttpOnly');
+        res.send({ statusCode: 200, auth: 'Session revoked.'});
+      },
+      function (e) {
+        res.send({statusCode: 404, err: e});
+      }
+    );
+});
+
 server.listen(port, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
