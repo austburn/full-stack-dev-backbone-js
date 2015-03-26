@@ -5,7 +5,7 @@ _ = require('underscore');
 Promise = require('promise');
 sha1 = require('sha1');
 bcrypt = require('bcrypt');
-filename = './movies.json';
+filename = __dirname + '/movies.json';
 
 Users = [];
 

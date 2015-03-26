@@ -1,12 +1,11 @@
-var gulp, gutil, source, browserify, server, gutil, source,
+var gulp, gutil, source, browserify, gutil, source,
   watchify, jscs, jshint, stylish, http, express, app, url,
-  proxy, logger, run;
+  proxy, logger, run, mocha;
 
 gulp = require('gulp');
 gutil = require('gutil');
 source = require('vinyl-source-stream');
 browserify = require('browserify');
-server = require('pushstate-server');
 watchify = require('watchify');
 jscs = require('gulp-jscs');
 jshint = require('gulp-jshint');
@@ -18,8 +17,9 @@ url = require('url');
 proxy = require('proxy-middleware');
 logger = require('morgan');
 run = require('gulp-run');
+mocha = require('gulp-mocha');
 
-gulp.task('default', ['serve']);
+gulp.task('default', ['server']);
 
 gulp.task('lint', ['jscs', 'jshint']);
 
@@ -35,12 +35,15 @@ gulp.task('jshint', function () {
     .pipe(jshint.reporter('fail'));
 });
 
+gulp.task('test', function () {
+  run('mocha --recursive').exec();
+});
+
 gulp.task('watch', function() {
   var bundler = watchify(browserify('./app/main.js', watchify.args));
 
   function rebundle() {
     return bundler.bundle()
-      // log errors if they happen
       .on('error', gutil.log.bind(gutil, 'Browserify Error'))
       .pipe(source('bundle.js'))
       .pipe(gulp.dest('./static'));
@@ -48,13 +51,6 @@ gulp.task('watch', function() {
   bundler.on('update', rebundle);
 
   return rebundle();
-});
-
-gulp.task('serve', ['watch'], function () {
-  server.start({
-    port: 7111,
-    directory: './'
-  });
 });
 
 gulp.task('server', ['watch', 'api'], function () {
@@ -71,5 +67,5 @@ gulp.task('server', ['watch', 'api'], function () {
 });
 
 gulp.task('api', function () {
-  run('node apiServer.js').exec();
+  run('node ./api/apiServer.js').exec();
 });
